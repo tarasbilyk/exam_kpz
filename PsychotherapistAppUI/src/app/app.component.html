@@ -1,0 +1,143 @@
+<div class="row">
+  <div class="col-md-6">
+    <div class="row">
+      <div class="col-md-12">
+        <p>Select psychotherapist</p>
+        <select [(ngModel)]="selectedId" class="form-control" style="width: 25%;">
+          <option *ngFor="let psychotherapist of psychotherapists" [value]="psychotherapist.id">{{psychotherapist.name}}
+          </option>
+        </select>
+        <p>You can edit records that belong to selected psychotherapist</p>
+        {{selectedId}}
+        <table>
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>description</th>
+              <th>startTime</th>
+              <th>endTime</th>
+              <th>frequency</th>
+              <th>roomNumber</th>
+              <th>psychotherapist name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let calendarRecord of calendarRecords"
+              [class.can-edit]="calendarRecord.psychotherapist.id == selectedId">
+              <td>{{calendarRecord.id}}</td>
+              <td>{{calendarRecord.description}}</td>
+              <td>{{calendarRecord.startTime}}</td>
+              <td>{{calendarRecord.endTime}}</td>
+              <td>{{calendarRecord.frequency}}</td>
+              <td>{{calendarRecord.roomNumber}}</td>
+              <td>{{calendarRecord.psychotherapist.name}}</td>
+              <td>
+                <button class="btn btn-warning" (click)="selectForEdit(calendarRecord)"
+                  [disabled]="calendarRecord.psychotherapist.id != selectedId">Edit</button>
+                <button class="btn btn-danger" (click)="deleteRecord(calendarRecord.id)"
+                  [disabled]="calendarRecord.psychotherapist.id != selectedId">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <hr>
+        <p>Frequency</p>
+        <p>0 - Once</p>
+        <p>1 - Weekly</p>
+        <p>2 - Monthly</p>
+        <p>3 - Yearly</p>
+        <p>4 - Custom</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <p>Create Calendar Record</p>
+    <p>Please fill all fields, otherwise request will fail</p>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="">description</label>
+          <input type="text" class="form-control" [(ngModel)]="createCalendarRecord.description">
+        </div>
+        <div class="form-group">
+          <label for="">startTime</label>
+          <input type="time" class="form-control" [(ngModel)]="createCalendarRecord.startTime">
+        </div>
+        <div class="form-group">
+          <label for="">endTime</label>
+          <input type="time" class="form-control" [(ngModel)]="createCalendarRecord.endTime">
+        </div>
+        <div class="form-group">
+          <label for="">frequency</label>
+          <select class="form-control" [(ngModel)]="createCalendarRecord.frequency">
+            <option *ngFor="let frequencyType of frequenceTypes">{{frequencyType}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="">roomNumber</label>
+          <select class="form-control" [(ngModel)]="createCalendarRecord.roomNumber">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="">psychotherapist</label>
+          <select class="form-control" [(ngModel)]="createCalendarRecord.psychotherapistId">
+            <option *ngFor="let psychotherapist of psychotherapists" [value]="psychotherapist.id">
+              {{psychotherapist.name}}
+            </option>
+          </select>
+        </div>
+        <br>
+        <button class="btn btn-success" (click)="addCalendarRecord()">Create</button>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <p>Update Calendar Record</p>
+    <p>Please fill all fields, otherwise request will fail</p>
+    <div class="row">
+      <div class="col-md-10">
+        <div class="form-group">
+          <label for="">description</label>
+          <input type="text" class="form-control" [(ngModel)]="updateCalendarRecord.description"
+            [disabled]="!isEditMode">
+        </div>
+        <div class="form-group">
+          <label for="">startTime</label>
+          <input type="time" class="form-control" [(ngModel)]="updateCalendarRecord.startTime" [disabled]="!isEditMode">
+        </div>
+        <div class="form-group">
+          <label for="">endTime</label>
+          <input type="time" class="form-control" [(ngModel)]="updateCalendarRecord.endTime" [disabled]="!isEditMode">
+        </div>
+        <div class="form-group">
+          <label for="">frequency</label>
+          <select class="form-control" [(ngModel)]="updateCalendarRecord.frequency" [disabled]="!isEditMode">
+            <option *ngFor="let frequencyType of frequenceTypes">{{frequencyType}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="">roomNumber</label>
+          <select class="form-control" [(ngModel)]="updateCalendarRecord.roomNumber" [disabled]="!isEditMode">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="">psychotherapist</label>
+          <select class="form-control" [(ngModel)]="updateCalendarRecord.psychotherapistId" [disabled]="!isEditMode">
+            <option *ngFor="let psychotherapist of psychotherapists" [value]="psychotherapist.id">
+              {{psychotherapist.name}}
+            </option>
+          </select>
+        </div>
+        <br>
+        <button class="btn btn-success" (click)="updateRecord()" [disabled]="!isEditMode">Save</button>
+      </div>
+    </div>
+  </div>
